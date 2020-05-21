@@ -6,7 +6,7 @@ namespace CacheManagerSpike
 {
     public class CacheManagerTests
     {
-        private readonly CacheManager<string> cacheManager;
+        private readonly CacheManager cacheManager;
         private readonly Func<object, string> factory;
         private int called;
 
@@ -18,17 +18,15 @@ namespace CacheManagerSpike
                 called++;
                 return $"{key} {called}";
             };
-            cacheManager = new CacheManager<string>(factory);
+            cacheManager = new CacheManager();
         }
 
         [Fact]
         public async Task ShouldUseCache_WhenSingleValueIsNotExpired()
         {
-            var cacheManager = new CacheManager<string>(factory);
-
-            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1));
+            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1), factory);
             await Task.Delay(100);
-            var k12 = cacheManager.GetOrAdd("key1", DateTime.MaxValue);
+            var k12 = cacheManager.GetOrAdd("key1", DateTime.MaxValue, factory);
 
             Assert.Equal("key1 1", k11);
             Assert.Equal("key1 1", k12);
@@ -38,11 +36,9 @@ namespace CacheManagerSpike
         [Fact]
         public async Task ShouldNotUseCache_WhenSingleValueIsExpired()
         {
-            var cacheManager = new CacheManager<string>(factory);
-
-            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1));
+            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1), factory);
             await Task.Delay(1000);
-            var k12 = cacheManager.GetOrAdd("key1", DateTime.MaxValue);
+            var k12 = cacheManager.GetOrAdd("key1", DateTime.MaxValue, factory);
 
             Assert.Equal("key1 1", k11);
             Assert.Equal("key1 2", k12);
@@ -52,10 +48,8 @@ namespace CacheManagerSpike
         [Fact]
         public void ShouldUseCache_WithTwoValues()
         {
-            var cacheManager = new CacheManager<string>(factory);
-
-            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1));
-            var k21 = cacheManager.GetOrAdd("key2", DateTime.Now.AddSeconds(1));
+            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1), factory);
+            var k21 = cacheManager.GetOrAdd("key2", DateTime.Now.AddSeconds(1), factory);
 
             Assert.Equal("key1 1", k11);
             Assert.Equal("key2 2", k21);
@@ -65,12 +59,10 @@ namespace CacheManagerSpike
         [Fact]
         public async Task ShouldNotUseCache_WithTwoValuesAndOneIsExpired()
         {
-            var cacheManager = new CacheManager<string>(factory);
-
-            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1));
-            var k21 = cacheManager.GetOrAdd("key2", DateTime.Now.AddSeconds(1));
+            var k11 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1), factory);
+            var k21 = cacheManager.GetOrAdd("key2", DateTime.Now.AddSeconds(1), factory);
             await Task.Delay(1000);
-            var k12 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1));
+            var k12 = cacheManager.GetOrAdd("key1", DateTime.Now.AddSeconds(1), factory);
 
             Assert.Equal("key1 1", k11);
             Assert.Equal("key2 2", k21);

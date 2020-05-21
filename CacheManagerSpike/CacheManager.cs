@@ -3,31 +3,27 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace CacheManagerSpike
 {
-    public class CacheManager<T>
+    public class CacheManager
     {
         private readonly MemoryCache cache;
-        private readonly Func<object, DateTime, Func<ICacheEntry, T>> createAbsoluteExpirationFactory;
 
-        public CacheManager(Func<object, T> factory)
-            : this(factory, new MemoryCacheOptions())
+        public CacheManager()
+            : this(new MemoryCacheOptions())
         {
         }
 
-        public CacheManager(Func<object, T> factory, MemoryCacheOptions options)
+        public CacheManager(MemoryCacheOptions options)
         {
             cache = new MemoryCache(options);
+        }
 
-            createAbsoluteExpirationFactory = (key, expireOn) => e =>
+        public T GetOrAdd<T>(object key, DateTime expireOn, Func<object, T> factory)
+        {
+            return cache.GetOrCreate(key, e =>
             {
                 e.AbsoluteExpiration = expireOn;
                 return factory(key);
-            };
-        }
-
-        public T GetOrAdd(object key, DateTime expireOn)
-        {
-            var factory = createAbsoluteExpirationFactory(key, expireOn);
-            return cache.GetOrCreate(key, factory);
+            });
         }
     }
 }
