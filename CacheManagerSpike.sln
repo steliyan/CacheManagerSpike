@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheManagerSpike", "CacheManagerSpike\CacheManagerSpike.csproj", "{E58EBCE6-4154-4C81-9A0C-F5B8EB9FC176}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E58EBCE6-4154-4C81-9A0C-F5B8EB9FC176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E58EBCE6-4154-4C81-9A0C-F5B8EB9FC176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E58EBCE6-4154-4C81-9A0C-F5B8EB9FC176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E58EBCE6-4154-4C81-9A0C-F5B8EB9FC176}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {275C1977-6DB2-40FD-AD5F-0103DC52873A}
+	EndGlobalSection
+EndGlobal
